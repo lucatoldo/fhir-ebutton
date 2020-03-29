@@ -26,6 +26,15 @@ In Down position it means that the medical device is not used, and a red light i
 
 ## What happens
 When turning UP the main switch, the device is sending a POST request to the FHIR server informing it that the device is now occupied.
+
 When turning Down the main switch the device is sending a POST request to the FHIR server informing that the device is now available for being used.
+
 If for some reasons the device is no longer usable, then all DIPS should be moved in position 0 and the main in position down.
 This sends a POST request to the FHIR server informing that the device does no longer exist.
+
+## What needs to be done still
+- Although in the POSTed message specific information about the device is available, in order to properly identify it, malicious attacker could reproduce the same message and send false information about resource availability or location.
+In order to avoid this, FHIR enables the use of Digital Signature. This is a *must have* functionality that is on top of my agenda for next development, although it might require changing the CHIP (from EPS8266 to ESP32S2 or other).
+- Currently the eButton has predefined and not changeable values about the resources. This prevents reuse for other medical resources. For this reason a configuration possibility needs to be provided. The next version will expand on the current approach for providing the address of the FHIR server by providing additional 7 fields for each of the 7 possible resources.
+- Currently only 7 different devices can be configured, this is due to the CHIP used inside the eButton that does not provide more pin. Future version of the eButton will allow to have many more combinations possible.
+- Currently the configuration of the eButton (e.g. providing the SSID/Password, the FHIR server) needs to be done manually. This his is not practical for large number of devices and should be improved.
