@@ -206,7 +206,11 @@ String FHIRgenerator(String chipiID,String deviceCode,String deviceText, bool bu
      type_coding_0["code"] = deviceCode;
      type_coding_0["text"] = deviceText;
   }
-//  doc["status"] = buttonStatus;
+  doc["status"] = "active";
+  doc["manufacturer"]="FHIReButton";
+  if (!buttonStatus) {
+    doc["status"] = "inactive";
+  }
   String output="";
   serializeJson(doc,output);
   return output;
