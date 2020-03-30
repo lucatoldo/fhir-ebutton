@@ -1,11 +1,11 @@
 // Specify the various I/Opins
 #define REDLED            1
-#define STATUSLED         3 
-#define CONFIG3           4   //DIPSWITCH=3  
-#define CONFIG4           5   //DIPSWITCH=4  
-#define STATUSSWITCH     10   //MAIN         
-#define CONFIG1          12   //DISPWITCH=1  
-#define CONFIG2          14   //DIPSWITCH=2  
+#define STATUSLED         3
+#define CONFIG3           4   //DIPSWITCH=3
+#define CONFIG4           5   //DIPSWITCH=4
+#define STATUSSWITCH     10   //MAIN
+#define CONFIG1          12   //DISPWITCH=1
+#define CONFIG2          14   //DIPSWITCH=2
 #define BLUELED          15
 
 #include <FS.h>               //File setup
@@ -30,7 +30,7 @@ String fhir_endpoint_url = "http://hapi.fhir.org/baseR4/Device";
 // Cardiac bed                          = 182590005 
 // High air loss bed                    = 182592002
 // Hospital bed      + Maske Beatmung   = 182592002 + 425447009
-// High air loss bed + Tube Beatmung    = 182592002 + 467238001 
+// High air loss bed + Tube Beatmung    = 182592002 + 467238001
 // High air loss bed + Luftröhrenshnitt = 182592002 +   2248009
 // High air loss bed + ECMO             = 182592002 +      3965
 
@@ -57,7 +57,7 @@ for(int i=0; i<17; i=i+8) {
   chipID |= ((ESP.getEfuseMac() >> (40 - i)) & 0xff) << i;
 }
 #endif
-// customise the access point ID with the CHIP ID . In this way the user can see to which device 
+// customise the access point ID with the CHIP ID . In this way the user can see to which device
 // is going to connect, since the chipID is also engraved on the external enclosure, close to the status button.
   strcat(apID,chipID.c_str());
 
@@ -67,18 +67,18 @@ for(int i=0; i<17; i=i+8) {
   pinMode(BLUELED,  OUTPUT);
 //
   pinMode(STATUSSWITCH,INPUT);
-//  
+//
   pinMode(CONFIG1,INPUT);
   pinMode(CONFIG2,INPUT);
   pinMode(CONFIG3,INPUT);
   pinMode(CONFIG4,INPUT);
-  
+
 // first turn off all the LED
 
   digitalWrite(REDLED,LOW);
   digitalWrite(BLUELED,LOW);
   digitalWrite(STATUSLED,LOW);
-  
+
  // Turn on the status led of connected but config not yet read
   digitalWrite(STATUSLED,HIGH);
 
@@ -90,9 +90,9 @@ for(int i=0; i<17; i=i+8) {
   wifiManager.addParameter(&p_fhirendpoint);
   wifiManager.autoConnect(apID);
 
- // If it gets to this point it means that it did connected to the WIFI 
+ // If it gets to this point it means that it did connected to the WIFI
  // determine the type of resource using the config switches
- 
+
   String code = codeCheck();
   // decoding the code
   killeDmsg=FHIRgenerator(chipID,"000000","deactivated",false );
@@ -107,7 +107,7 @@ for(int i=0; i<17; i=i+8) {
     } else if (code ="011") {
       uPmsg=FHIRgenerator(chipID,"182592002|425447009","High air loss bed|Ventilator",true );
       dowNmsg=FHIRgenerator(chipID,"182592002|425447009","High air loss bed|Ventilator",false );
-    } else if (code ="100") { 
+    } else if (code ="100") {
       uPmsg=FHIRgenerator(chipID,"182592002|467238001","High air loss bed|Tube Respiration",true );
       dowNmsg=FHIRgenerator(chipID,"182592002|467238001","High air loss bed|Tube Respiration",false );
     } else if (code ="101") {
@@ -116,10 +116,10 @@ for(int i=0; i<17; i=i+8) {
     } else if (code ="110") {
       uPmsg=FHIRgenerator(chipID,"182592002|3965","High air loss bed|ECMO",true);
       dowNmsg=FHIRgenerator(chipID,"182592002|3965","High air loss bed|ECMO",false );
-    } else if (code ="111") {    
+    } else if (code ="111") {
       uPmsg=FHIRgenerator(chipID,"229772003","Bed",true );
       dowNmsg=FHIRgenerator(chipID,"229772003","Bed",false );
-   }  
+   }
     if (digitalRead(CONFIG4)) {
       digitalWrite(STATUSLED,LOW);
       if (digitalRead(STATUSSWITCH)) {
@@ -130,7 +130,7 @@ for(int i=0; i<17; i=i+8) {
         digitalWrite(BLUELED,LOW);
        }
     } else {
-       digitalWrite(STATUSLED,LOW);        
+       digitalWrite(STATUSLED,LOW);
     }
 }
 
@@ -154,15 +154,16 @@ String codeCheck() {
   return code;
 }
 
- 
- bool postMessageToFHIRdb(String msg) {
-  const char* host = "hapi.fhir.org";
 
+ bool postMessageToFHIRdb(String msg) {
+  int firstslash= fhir_endpoint_url.indexOf('/');
+  int nextslash = fhir_endpoint_url.indexOf('/',firstslash+2);
+  char* host = fhir_endpoint_url.substring(firststlash,nextslash).c_str();
   // Use WiFiClient class to create TCP connections
   WiFiClient client;
   const int httpPort = 80;
   if (!client.connect(host, httpPort)) {
-    digitalWrite(STATUSLED,HIGH);    
+    digitalWrite(STATUSLED,HIGH);
     return false;
   }
   digitalWrite(STATUSLED,LOW);
@@ -192,7 +193,7 @@ String FHIRgenerator(String chipiID,String deviceCode,String deviceText, bool bu
   JsonObject type = doc.createNestedObject("type");
   JsonArray type_coding = type.createNestedArray("coding");
   StringSplitter *deviceCodeS = new StringSplitter(deviceCode, '|',10);
-  StringSplitter *deviceTextS = new StringSplitter(deviceText, '|',10); 
+  StringSplitter *deviceTextS = new StringSplitter(deviceText, '|',10);
   int itemCount = deviceCodeS->getItemCount();
   for(int i = 0; i < itemCount; i++){
      String deviceCode = deviceCodeS -> getItemAtIndex(i);
@@ -201,7 +202,7 @@ String FHIRgenerator(String chipiID,String deviceCode,String deviceText, bool bu
      type_coding_0["system"] = "SNO";
      type_coding_0["code"] = deviceCode;
      type_coding_0["text"] = deviceText;
-  } 
+  }
 //  doc["status"] = buttonStatus;
   String output="";
   serializeJson(doc,output);
