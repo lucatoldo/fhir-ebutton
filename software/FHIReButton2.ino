@@ -8,7 +8,6 @@
 #define CONFIG2          14   //DIPSWITCH=2
 #define BLUELED          15
 
-#include <FS.h>               //File setup
 #include <ArduinoJson.h>      //JSON parser
 #include <StringSplitter.h>   //String splitter, used for A|B|C handling of hardcoded configs
 // following 4 required by WiFiManager
@@ -16,9 +15,8 @@
 #include <DNSServer.h>        //Local DNS Server used for redirecting all requests to the configuration portal
 #include <ESP8266WebServer.h> //Local WebServer used to serve the configuration portal
 #include <WiFiManager.h>      //https://github.com/tzapu/WiFiManager WiFi Configuration Magic
-
 WiFiManager wifiManager;
-// FHIR backend replaceable by configuration
+// FHIR backend replaced by configuration
 String fhir_endpoint_url = "http://hapi.fhir.org/baseR4/Device";
 
 // The FHIReButton has 8 possible resources (the DIPSWitch with 2*2*2, the last DIP  is used as general ON/OFF config)
@@ -99,25 +97,25 @@ for(int i=0; i<17; i=i+8) {
   if (code =="000") {
     uPmsg=""; dowNmsg="";
     } else if (code ="001") {
-      uPmsg= FHIRgenerator(chipID,"182590005","Cardiac bed",true );
+      uPmsg  = FHIRgenerator(chipID,"182590005","Cardiac bed",true );
       dowNmsg= FHIRgenerator(chipID,"182590005","Cardiac bed",false );
     } else if (code ="010") {
-      uPmsg==FHIRgenerator(chipID,"182592002","High air loss bed",true );
-      dowNmsg==FHIRgenerator(chipID,"182592002","High air loss bed",false );
+      uPmsg  =FHIRgenerator(chipID,"182592002","High air loss bed",true );
+      dowNmsg=FHIRgenerator(chipID,"182592002","High air loss bed",false );
     } else if (code ="011") {
-      uPmsg=FHIRgenerator(chipID,"182592002|425447009","High air loss bed|Ventilator",true );
+      uPmsg  =FHIRgenerator(chipID,"182592002|425447009","High air loss bed|Ventilator",true );
       dowNmsg=FHIRgenerator(chipID,"182592002|425447009","High air loss bed|Ventilator",false );
     } else if (code ="100") {
-      uPmsg=FHIRgenerator(chipID,"182592002|467238001","High air loss bed|Tube Respiration",true );
+      uPmsg  =FHIRgenerator(chipID,"182592002|467238001","High air loss bed|Tube Respiration",true );
       dowNmsg=FHIRgenerator(chipID,"182592002|467238001","High air loss bed|Tube Respiration",false );
     } else if (code ="101") {
-      uPmsg=FHIRgenerator(chipID,"182592002|248009","High air loss bed|Tracheotomy",true );
+      uPmsg  =FHIRgenerator(chipID,"182592002|248009","High air loss bed|Tracheotomy",true );
       dowNmsg=FHIRgenerator(chipID,"182592002|248009","High air loss bed|Tracheotomy",false );
     } else if (code ="110") {
-      uPmsg=FHIRgenerator(chipID,"182592002|3965","High air loss bed|ECMO",true);
+      uPmsg  =FHIRgenerator(chipID,"182592002|3965","High air loss bed|ECMO",true);
       dowNmsg=FHIRgenerator(chipID,"182592002|3965","High air loss bed|ECMO",false );
     } else if (code ="111") {
-      uPmsg=FHIRgenerator(chipID,"229772003","Bed",true );
+      uPmsg  =FHIRgenerator(chipID,"229772003","Bed",true );
       dowNmsg=FHIRgenerator(chipID,"229772003","Bed",false );
    }
     if (digitalRead(CONFIG4)) {
@@ -244,5 +242,3 @@ void loop() {
       ESP.deepSleep(0);
    }
 }
-
-///////////////////////////////////////////////
