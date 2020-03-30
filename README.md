@@ -33,6 +33,7 @@ If for some reasons the device is no longer usable, then all DIPS should be move
 This sends a POST request to the FHIR server informing that the device does no longer exist.
 
 ## What still needs to be done
+- BUG to be fixed: the server to which the messages are sent is hardcoded and should be variable
 - Although in the POSTed message specific information about the device is available, in order to properly identify it, malicious attacker could reproduce the same message and send false information about resource availability or location.
 In order to avoid this, FHIR enables the use of Digital Signature. This is a *must have* functionality that is on top of my agenda for next development, although it might require changing the CHIP (from EPS8266 to ESP32S2 or other).
 - Currently the eButton has predefined and not changeable values about the resources. This prevents reuse for other medical resources. For this reason a configuration possibility needs to be provided. The next version will expand on the current approach for providing the address of the FHIR server by providing additional 7 fields for each of the 7 possible resources.
