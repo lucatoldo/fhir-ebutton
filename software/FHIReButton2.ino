@@ -158,10 +158,13 @@ String codeCheck() {
  bool postMessageToFHIRdb(String msg) {
   int firstslash= fhir_endpoint_url.indexOf('/');
   int nextslash = fhir_endpoint_url.indexOf('/',firstslash+2);
-  char* host = fhir_endpoint_url.substring(firststlash,nextslash).c_str();
+  String host = fhir_endpoint_url.substring(firstslash,nextslash);
   // Use WiFiClient class to create TCP connections
   WiFiClient client;
-  const int httpPort = 80;
+  int httpPort = 80;
+  if (fhir_endpoint_url.startsWith("https:")) {
+    httpPort=443;
+  }
   if (!client.connect(host, httpPort)) {
     digitalWrite(STATUSLED,HIGH);
     return false;
