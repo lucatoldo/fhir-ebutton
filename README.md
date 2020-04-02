@@ -32,10 +32,14 @@ When turning Down the main switch the device is sending a POST request to the FH
 If for some reasons the device is no longer usable, then all DIPS should be moved in position 0 and the main in position down.
 This sends a POST request to the FHIR server informing that the device does no longer exist.
 
-## What still needs to be done
-- BUG to be fixed: the server to which the messages are sent is hardcoded and should be variable
-- Although in the POSTed message specific information about the device is available, in order to properly identify it, malicious attacker could reproduce the same message and send false information about resource availability or location.
-In order to avoid this, FHIR enables the use of Digital Signature. This is a *must have* functionality that is on top of my agenda for next development, although it might require changing the CHIP (from EPS8266 to ESP32S2 or other).
-- Currently the eButton has predefined and not changeable values about the resources. This prevents reuse for other medical resources. For this reason a configuration possibility needs to be provided. The next version will expand on the current approach for providing the address of the FHIR server by providing additional 7 fields for each of the 7 possible resources.
-- Currently only 7 different devices can be configured, this is due to the CHIP used inside the eButton that does not provide more pin. Future version of the eButton will allow to have many more combinations possible.
-- Currently the configuration of the eButton (e.g. providing the SSID/Password, the FHIR server) needs to be done manually. This his is not practical for large number of devices and should be improved.
+## Thoughts for improvements
+- allow provisioning of security certificate at configuration time (currently it is hardcoded in the .h file).
+- allow customisation of the 7 possible "devices"
+- change the format of the message (currently it is sending a Device resource, however perhaps a better approach would be to send a Bundle with a Location, a Device and a Provenance resource)
+- enforce security on the button usage, for example by requiring a RFID tag to belayed over the device to ensure
+that only authorised people (those with the RFID tag) can change the status of the devices
+- add geolocation information dynamically (using WIFI information and also a GPS device) or statically (through user configuration)
+- provide a configurable way to specify the output for use with non FHIR endpoints
+- include a feedback loop to the user, if the POST message to the repository have been successful
+- add audio feedback (e.g. beep)
+- check energy level of the battery in case its below ,min requirement ..
