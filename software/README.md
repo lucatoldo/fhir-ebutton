@@ -10,8 +10,8 @@ on MacBook running macOs Catalina 10.15.3
 
 | Library     | Version | Purpose |
 | ------------|-----|--------|
-| BearSSLHelpers | digital signature |
-| bearssl | digital signature |
+| BearSSLHelpers | | digital signature |
+| bearssl | | digital signature |
 | ArduinoJson | 6.15.0 | creating JSON message |
 | ESP8266WiFi | 1.0 | WiFi enablement |
 | ESP8266WebServer | 1.0 | UI for SSID handling |
