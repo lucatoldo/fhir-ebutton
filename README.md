@@ -32,6 +32,8 @@ When turning Down the main switch the device is sending a POST request to the FH
 If for some reasons the device is no longer usable, then all DIPS should be moved in position 0 and the main in position down.
 This sends a POST request to the FHIR server informing that the device does no longer exist.
 
+It is important to know, that this service delivers DIGITALLY SIGNED content, this means that even although the messages are deposited in public, nobody elses can claim to have created them and/or modify them since this would be detectable by checking the digital signature against the public key of the service. 
+
 ## Thoughts for improvements
 - allow provisioning of security certificate at configuration time (currently it is hardcoded in the .h file).
 - allow customisation of the 7 possible "devices"
