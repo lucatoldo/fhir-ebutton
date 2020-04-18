@@ -1,5 +1,5 @@
 # fhir-ebutton
-This repository has the Fritzing sketches for the hardware and the .ino code for the software of the FHIReButton used in the https://devpost.com/software/icu-bed-availability-service #WIRVSVIRUS hackaton
+This repository has the Fritzing sketches for the hardware and the .ino code for the software of the FHIReButton used in the https://devpost.com/software/icu-bed-availability-service #WIRVSVIRUS hackaton and also for https://devpost.com/software/pflegeheim-burokratie-mehr-zeit-mit-bewohner-innen #CareHacktCorona
 
 # How to use it
 ## WIFI Connection
